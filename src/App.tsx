@@ -1,26 +1,23 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Timer } from './components/Timer';
+
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+  const flexColumn : React.CSSProperties = {display: 'flex', flexDirection: 'column'};
+  const flexRow: React.CSSProperties = {display: 'flex', flexDirection: 'row', justifyContent: 'space-around', width: '80vw',
+  margin: '2vw'};
+
+
+  return <div style={flexColumn}>
+      <div style={flexRow}>
+        <Timer cityOrCountry={'Paris'}></Timer>
+        <Timer cityOrCountry='London'></Timer>
+      </div>
+      <div style={flexRow}>
+        <Timer cityOrCountry='Russia'></Timer>
+        <Timer cityOrCountry={'America'}></Timer>
+      </div>
     </div>
-  );
 }
 
 export default App;
