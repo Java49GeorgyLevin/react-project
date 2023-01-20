@@ -13,12 +13,12 @@ function App() {
 
   return <div style={flexColumn}>
       <div style={flexRow}>
-        <Timer cityOrCountry='London' inputId={'in1'}></Timer>
-        <Timer cityOrCountry='' inputId={'in2'}></Timer>
+        <Timer cityOrCountry=''></Timer>
+        <Timer cityOrCountry=''></Timer>
       </div>
       <div style={flexRow}>
-      <Timer cityOrCountry='' inputId={'in3'}></Timer>
-      <Timer cityOrCountry='' inputId={'in4'}></Timer>
+        <Timer cityOrCountry=''></Timer>
+        <Timer cityOrCountry=''></Timer>
       </div>
     </div>
 }

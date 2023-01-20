@@ -4,7 +4,6 @@ import timeZones from "../time-zones";
 import { Input } from "./Input";
 type TimerProps = {
     cityOrCountry: string;
-    inputId: string;
 }
 export const Timer: React.FC<TimerProps> = (props) => {
     let [timeZone, setTimeZone] = React.useState(timeZones[timeZoneIndex(props.cityOrCountry)]?.name);
@@ -28,6 +27,10 @@ export const Timer: React.FC<TimerProps> = (props) => {
         return res;
     }
 
+    function uniqueId(): string {
+        return (new Date()).toISOString();
+    }
+
     function tick() {
         console.log("tick");
         setTime(new Date());
@@ -43,6 +46,6 @@ export const Timer: React.FC<TimerProps> = (props) => {
         <h4>(Time zone: {timeZone})</h4>
         <label style={{display: "block",
         textAlign: "center", fontSize: "2em"}}>Time {time.toLocaleTimeString(undefined,{timeZone})}</label>
-        <Input inputId={props.inputId} inputProcess={timeZoneProcess} placeHolder={pH}/>
+        <Input inputId={uniqueId()} inputProcess={timeZoneProcess} placeHolder={pH}/>
     </div>
 }
