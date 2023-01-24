@@ -10,5 +10,5 @@ export const Alert: React.FC<AlertProps> = ({type, message}) => {
         case "info": backGround = "green"; break;
         case "warn": backGround = "yellow"
     }
-    return <p style={{backgroundColor: backGround}}>{message}</p>
+    return <p style={{backgroundColor: backGround, color: "white", fontWeight: "bold"}}>{message}</p>
 }

@@ -1,26 +1,48 @@
 import React from 'react';
-import { Timer } from './components/Timer';
 import { Input } from './components/Input';
-import { Alert } from './components/Alert';
-import { getValue } from '@testing-library/user-event/dist/utils';
-import { stringify } from 'querystring';
-import { parse } from 'path';
+import { Timer } from './components/Timer';
 
 function App() {
-  const flexColumn : React.CSSProperties = {display: 'flex', flexDirection: 'column'};
-  const flexRow: React.CSSProperties = {display: 'flex', flexDirection: 'row', justifyContent: 'space-around', width: '80vw',
-  margin: '2vw'};
+  const flexColumn: React.CSSProperties = { display: "flex", flexDirection: "column" }
+  const flexRow: React.CSSProperties = { display: "flex", flexDirection: "row" , 
+  justifyContent: "space-around", width: "50vw", marginTop: "4vh"}
+  
+  const [citiesAndCountries, setCitiesAndCountries] = React.useState<string[]>([])
+  function creatingArCAC(value: string): string {
+      const citiesAndCountries: string[] = value.split("#");
+      let res: string = "";
+      if(citiesAndCountries.length < 2 && citiesAndCountries.length % 2 != 0) {
+        res = "Amount non even";
+      } else {
+      setCitiesAndCountries(citiesAndCountries);
+// console.log('citiesAndCountries', citiesAndCountries);
+      }
+  return res;
+  }
 
+  function getWatches(citiesAndCountries: string[]): JSX.Element[] {
+    let res: JSX.Element[] = []; 
+    for(let i: number = 0; i < citiesAndCountries.length; i = i + 2) {
+// console.log('citiesAndCountries[i]',i, citiesAndCountries[i]);
+// console.log('citiesAndCountries[i+1]',i, citiesAndCountries[i+1]);
+      res.push(<div style={flexRow}>
+      <Timer cityOrCountry={citiesAndCountries[i]}></Timer>
+      <Timer cityOrCountry={citiesAndCountries[i+1]}></Timer>
+    </div>)
+    }
+    return res;
+  }
+
+ 
   return <div style={flexColumn}>
-      <div style={flexRow}>
-        <Timer cityOrCountry=''></Timer>
-        <Timer cityOrCountry=''></Timer>
-      </div>
-      <div style={flexRow}>
-        <Timer cityOrCountry=''></Timer>
-        <Timer cityOrCountry=''></Timer>
-      </div>
-    </div>
+    <Input placeHolder={'Enter even amount Cities or Countries separated by #'} inputProcess={creatingArCAC}></Input>
+    <section>
+      {getWatches(citiesAndCountries)}
+    </section>
+  </div>
+
 }
 
 export default App;
+
+
