@@ -15,7 +15,6 @@ function App() {
         res = "Amount non even";
       } else {
       setCitiesAndCountries(citiesAndCountries);
-// console.log('citiesAndCountries', citiesAndCountries);
       }
   return res;
   }
@@ -23,8 +22,6 @@ function App() {
   function getWatches(citiesAndCountries: string[]): JSX.Element[] {
     let res: JSX.Element[] = []; 
     for(let i: number = 0; i < citiesAndCountries.length; i = i + 2) {
-// console.log('citiesAndCountries[i]',i, citiesAndCountries[i]);
-// console.log('citiesAndCountries[i+1]',i, citiesAndCountries[i+1]);
       res.push(<div style={flexRow}>
       <Timer cityOrCountry={citiesAndCountries[i]}></Timer>
       <Timer cityOrCountry={citiesAndCountries[i+1]}></Timer>
@@ -32,7 +29,6 @@ function App() {
     }
     return res;
   }
-
  
   return <div style={flexColumn}>
     <Input placeHolder={'Enter even amount Cities or Countries separated by #'} inputProcess={creatingArCAC}></Input>
@@ -44,5 +40,3 @@ function App() {
 }
 
 export default App;
-
-

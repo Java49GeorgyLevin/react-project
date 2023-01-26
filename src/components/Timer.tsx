@@ -1,6 +1,4 @@
-
 import React from "react";
-import { useRef } from "react";
 
 import timeZones from "../time-zones";
 import { Input } from "./Input";
@@ -17,13 +15,17 @@ console.log(props.cityOrCountry);
 console.log("timeZoneName", timeZoneName)       
     const [time, setTime] = React.useState(new Date());
     function tick() {
-        // console.log("tick");
+        console.log("tick");
         setTime(new Date());
     }
     React.useEffect(()=>{
         const interval = setInterval(tick, 1000);
+        const timeZoneIndex: number =
+        timeZones.findIndex(tz => JSON.stringify(tz).includes("\"" + props.cityOrCountry + "\""));
+        timeZoneName.current = timeZone ? props.cityOrCountry : "Israel";
+        setTimeZone(timeZones[timeZoneIndex]?.name);
         return ()=>clearInterval(interval);
-    }, [])
+    }, [props])
     
     function processCityCountry(value: string): string {
         const index =  timeZones.findIndex(tz => JSON.stringify(tz).includes(value));
