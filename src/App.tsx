@@ -1,48 +1,30 @@
 import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import './App.css'
-import { CounterMultiply } from './components/CounterMultiply';
-import { CounterSquare } from './components/CounterSquare';
-import { CounterUpdater } from './components/CounterUpdater';
-import { Login } from './components/Login';
-import { Logout } from './components/Logout';
-import {useDispatch, useSelector} from 'react-redux';
-import { Input } from './components/Input';
-import { userNameActions } from './redux/usernameSlice';
+import { BreadProducts } from './components/pages/BreadProducts';
+import { Customers } from './components/pages/Customers';
+import { DairyProducts } from './components/pages/DairyProducts';
+import { Home } from './components/pages/Home';
+import { Orders } from './components/pages/Orders';
+import { Navigator } from './components/navigators/Navigator';
+import { productsConfig } from './models/products-config';
+import { layoutConfig } from './models/layout-config';
+
 function App() {
-  const auth: boolean = useSelector<any, boolean>(state => state.auth.authenticated);
-  const username: string | null = useSelector<any, string | null>(state => state.username.userName)
-  const admin: boolean = useSelector<any, boolean>(state => state.username.checkAdmin);
-  const [operand, setOperand] = React.useState(1);
-  const [factor, setFactor] = React.useState(10);
-  const dispatch = useDispatch();
-  return <div>
-    {auth && admin &&
-        <Input placeHolder={'Enter operand'} inputProcess={function (value: string):
-         string {
-        setOperand(+value);
-        return '';
-      } }></Input>}
-      {auth &&
-        <Input placeHolder={'Enter factor'} inputProcess={function (value: string):
-         string {
-        setFactor(+value);
-        return '';
-      } }></Input>}
-    {auth && <div>
-    <CounterUpdater operand={operand}></CounterUpdater>
-    <CounterSquare></CounterSquare>
-    <CounterMultiply factor={factor}></CounterMultiply>
-  </div>}
-    {!auth && <Input placeHolder={'Input username'} inputProcess ={function (value: string):
-      string {
-      dispatch(userNameActions.login(value));
-      return '';
-  } }></Input>}
-    {username && <p>username: {username}</p>}
-    {auth && <Logout></Logout>}
-    {!auth && username && <Login></Login>}
-  </div>
+  return <BrowserRouter>
+      <Routes>
+          <Route path='/' element={<Navigator navigatorConfig={layoutConfig}/>}>
+              <Route index element={<Home/>}></Route>
+              <Route path='customers' element={<Customers/>}/>
+              <Route path='orders' element={<Orders/>}></Route>
+              <Route path='products' element={<Navigator navigatorConfig={productsConfig}/>}>
+                    <Route path='dairy' element={<DairyProducts/>}/>
+                    <Route path='bread' element={<BreadProducts/>}/>
+              </Route>
+          </Route>
+      </Routes>
+  </BrowserRouter>
 
 }
 export default App;

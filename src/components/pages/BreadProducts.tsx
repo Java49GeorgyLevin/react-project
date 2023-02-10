@@ -1,0 +1,1 @@
+export const BreadProducts: React.FC = () => <h1>BreadProducts</h1> 
