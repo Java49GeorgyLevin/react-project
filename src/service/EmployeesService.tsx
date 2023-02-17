@@ -26,34 +26,33 @@ function getAge(fullDate: string) :number {
     return today - new Date(fullDate).getFullYear();
 }
 
-type ageType = {ageMin: number, ageMax: number, ageAverage: number};
-export function getAgeStatistics(employees: Employee[]): ageType {
+type statType = {min: number, max: number, average: number};
+export function getAgeStatistics(employees: Employee[]): statType {
     const ageInitial: number = getAge(employees[0].birthDate);
-    const ageStat = {ageMin: ageInitial, ageMax: ageInitial, ageAverage: 0};
+    const ageStat = {min: ageInitial, max: ageInitial, average: 0};
     return employees.reduce((res, cur) => {
         const curAge = getAge(cur.birthDate)
-        if(curAge < res.ageMin) {
-            res.ageMin = curAge;
-        } else if(curAge > res.ageMax) {
-            res.ageMax = curAge;
+        if(curAge < res.min) {
+            res.min = curAge;
+        } else if(curAge > res.max) {
+            res.max = curAge;
         }
-        res.ageAverage += Math.round(curAge / employees.length);
+        res.average += Math.round(curAge / employees.length);
         return res;
     }, ageStat);
 }
 
-type salaryType = {salaryMin: number, salaryMax: number, salaryAverage: number};
-export function getSalaryStatistics(employees: Employee[]): salaryType {
+export function getSalaryStatistics(employees: Employee[]): statType {
     const salaryInitial = employees[0].salary;
-    const salaryStat = {salaryMin: salaryInitial, salaryMax: salaryInitial, salaryAverage: 0};
+    const salaryStat = {min: salaryInitial, max: salaryInitial, average: 0};
     return employees.reduce((res, cur) => {
         const curSalary = cur.salary;
-        if(curSalary < res.salaryMin) {
-            res.salaryMin = curSalary; 
-        } else if(curSalary > res.salaryMax) {
-            res.salaryMax = curSalary;
+        if(curSalary < res.min) {
+            res.min = curSalary; 
+        } else if(curSalary > res.max) {
+            res.max = curSalary;
         }
-        res.salaryAverage += Math.round(curSalary / employees.length);
+        res.average += Math.round(curSalary / employees.length);
         return res;        
     }, salaryStat);
 }
