@@ -1,0 +1,9 @@
+{
+    "minValueId": 100000,
+    "maxValueId": 999999,
+    "arDepartmentNames": ["Engineering", "QA", "Development", "Management", "Accounting"],
+    "minSalary": 7000,
+    "maxSalary": 45000,
+    "minBirthYear": 1950,
+    "maxBirthYear": 2006 
+} 

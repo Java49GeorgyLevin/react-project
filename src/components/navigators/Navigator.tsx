@@ -1,34 +1,30 @@
-import { NavLink, Outlet } from "react-router-dom"
-import { NavigatorProps } from "../../models/NavigatorProps"
-import './navigators.css'
-type NavProps = {
-    navigatorConfig: NavigatorProps
+import { Link, Outlet } from "react-router-dom";
+import { NavigatorProps } from "../../model/NavigatorProps"
+// import '../navigators/navigators.css'
+import {Box, AppBar, Tabs, Tab} from "@mui/material"
+import React from "react";
+export const Navigator: React.FC<NavigatorProps> = ({ className, routes }) => {
+    const [tabNumber, setTabNumber] = React.useState(0);
+    function changeTabNumber(event: any, newNumber: number) {
+        setTabNumber(newNumber);
+    }
+    return <Box sx={{marginTop: "15vh"}}>
+        <AppBar sx={{backgroundColor: "lightgray"}}>
+            <Tabs value={tabNumber} onChange={changeTabNumber} >
+                {getNavItems(routes)}
+            </Tabs>
+        </AppBar>
+        <Outlet></Outlet>
+    </Box>
 }
-
-export const Navigator: React.FC<NavProps> = (props) => {
-    function getItemsMenu(): JSX.Element[] {
-        return props.navigatorConfig.arRoutePathLabel.map((el) => {
-            return <li className='navigator-item'> 
-                <NavLink style={({isActive}) => activeLink(isActive)} to={el.routingPath}>{el.label}</NavLink>
-            </li>
-        })
+function getNavItems(routes: { path: string; label: string }[]): React.ReactNode {
+    return routes.map((r, index) => <Tab component={Link} to={r.path}
+     label={r.label} key={index}/>)
+}
+function getActiveProps(isActive: boolean) : React.CSSProperties {
+    let res: React.CSSProperties = {};
+    if (isActive) {
+        res = {backgroundColor: "blue", color: "white", fontSize: "1.2em"}
     }
-
-    function activeLink(isActive: boolean): React.CSSProperties|undefined {
-        let res: React.CSSProperties = {};
-        if (isActive) {
-            res = {backgroundColor: "blueviolet", color: "white"}
-        }
-        return res;
-    }
-
-    return <div>
-        <nav>
-           <ul className={props.navigatorConfig.CssClassName}>
-                {getItemsMenu()}
-            </ul>
-        </nav>
-        <Outlet/>
-    </div>
-
+    return res;
 }
