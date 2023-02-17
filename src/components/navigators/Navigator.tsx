@@ -1,6 +1,5 @@
 import { Link, Outlet } from "react-router-dom";
 import { NavigatorProps } from "../../model/NavigatorProps"
-// import '../navigators/navigators.css'
 import {Box, AppBar, Tabs, Tab} from "@mui/material"
 import React from "react";
 export const Navigator: React.FC<NavigatorProps> = ({ className, routes }) => {
@@ -20,11 +19,4 @@ export const Navigator: React.FC<NavigatorProps> = ({ className, routes }) => {
 function getNavItems(routes: { path: string; label: string }[]): React.ReactNode {
     return routes.map((r, index) => <Tab component={Link} to={r.path}
      label={r.label} key={index}/>)
-}
-function getActiveProps(isActive: boolean) : React.CSSProperties {
-    let res: React.CSSProperties = {};
-    if (isActive) {
-        res = {backgroundColor: "blue", color: "white", fontSize: "1.2em"}
-    }
-    return res;
 }

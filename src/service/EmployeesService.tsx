@@ -53,7 +53,7 @@ export function getSalaryStatistics(employees: Employee[]): salaryType {
         } else if(curSalary > res.salaryMax) {
             res.salaryMax = curSalary;
         }
-        res.salaryAverage += curSalary / employees.length;
+        res.salaryAverage += Math.round(curSalary / employees.length);
         return res;        
     }, salaryStat);
 }
