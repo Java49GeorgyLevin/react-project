@@ -1,9 +1,11 @@
-import { getAgeStatistics } from "../../service/EmployeesService"
-import React from "react"
-import './table.css'
-import { Statistics } from "../Statistics"
-
+import React from 'react';
+import {useSelector} from 'react-redux';
+import { Employee } from '../../model/Employee';
+import { Statistics } from '../Statistics';
 export const AgeStatistics: React.FC = () => {
-    const title: string = 'Age Statistics';
-    return <Statistics foo={getAgeStatistics} title={title}/>
+    const employees: Employee[] = useSelector<any, Employee[]>(state => state.company.employees)
+    const employeesAge = employees.map(empl => ({
+        ...empl, age: new Date().getFullYear() - new Date(empl.birthDate).getFullYear()
+    }))
+    return <Statistics title="Age Statistics" field="age" objects={employeesAge} />
 }

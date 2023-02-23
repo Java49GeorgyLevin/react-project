@@ -1,4 +1,6 @@
-export type NavigatorProps = {
-    className: string;
-    routes: {path: string, label: string}[];
+import { RouteType } from "./RouteType";
+export type NavigatorProps = { 
+    routes: RouteType[];
+    flAdmin: boolean;
+    flAuth: boolean
 }

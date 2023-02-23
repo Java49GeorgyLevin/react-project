@@ -1,28 +1,52 @@
-import React from "react"
-import { GridColumns, DataGrid } from "@mui/x-data-grid";
-import { Typography, Box } from "@mui/material"
-import { useSelector } from "react-redux";
-import { Employee } from "../model/Employee";
+import { Box, Typography } from "@mui/material";
+import { DataGrid, GridColumns } from "@mui/x-data-grid";
+import React from "react";
+import './pages/table.css'
+type Props = {
+    title: string;
+    field: string;
+    objects: any[];
+}
+const columns: GridColumns = [
+    {
+        field: "minValue", headerName: "Minimal Value", headerAlign: "center",
+        align: "center", headerClassName: "header", flex: 1
+    },
+    {
+        field: "maxValue", headerName: "Maximal Value", headerAlign: "center",
+        align: "center", headerClassName: "header", flex: 1
+    },
+    {
+        field: "avgValue", headerName: "Average Value", headerAlign: "center",
+        align: "center", headerClassName: "header", flex: 1
+    }
+]
+export const Statistics: React.FC<Props> = ({ title, field, objects }) => {
+    let statistics: any = {id: 1};
+    if (objects.length > 0) {
+        const initialObject: { minValue: number, maxValue: number, avgValue: number } =
+        {
+            minValue: objects[0][field],
+            maxValue: objects[0][field],
+            avgValue: 0
+        };
+        statistics = objects.reduce((res, cur) => {
+            if (res.minValue > cur[field]) {
+                res.minValue = cur[field];
+            } else if(res.maxValue < cur[field]) {
+                res.maxValue = cur[field];
+            }
+            res.avgValue += cur[field]
+             return res;  
+        }, initialObject)
+        statistics.id = 1;
+        statistics.avgValue = Math.round(statistics.avgValue / objects.length);
+    }
 
-export type StatisticsProps = {foo: Function, title: string};
-export const Statistics: React.FC<StatisticsProps> = ({foo, title}) => {
-    const columns = React.useRef<GridColumns> ([
-        {field: 'min', headerName: 'Minimal Value', headerClassName: 'header', flex: 1, headerAlign: 'center' , align: 'center'},
-        {field: 'max', headerName: 'Maximal Value', headerClassName: 'header', flex: 1, headerAlign: 'center' , align: 'center'},
-        {field: 'average', headerName: 'Average Value', headerClassName: 'header', flex: 1, headerAlign: 'center' , align: 'center'}
-    ])
 
-    const employees = useSelector<any, Employee[]>(state => state.company.employees);
-    return employees.length == 0 ?
-    <Box>
-        <Typography>No an one employee</Typography>
-    </Box> 
-    :    
-    <Box>
-        <Typography align='center'>{title}</Typography>
-     
-        <Box sx={{height: '80vh', width: '80vw'}}>
-            <DataGrid columns={columns.current} rows={[{id: 'id', ...foo(employees)}]}/>
-        </Box>
+    return <Box sx={{ width: "50vw", height: "30Vh" }}>
+        <Typography sx={{fontSize: "1.8em",
+         fontWeight: "bold", textAlign: "center"}}>{title}</Typography>
+        <DataGrid columns={columns} rows={[statistics]} />
     </Box>
 }

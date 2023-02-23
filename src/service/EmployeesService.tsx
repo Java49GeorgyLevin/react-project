@@ -1,58 +1,50 @@
-import {Employee} from "../model/Employee"
-import employeeConfig from '../config/employee-config.json'
-import { getRandomNumber, getElement, getRandomDate} from "../utils/random"
-
-const today: number = new Date().getFullYear();
-
-export function createNewEmployee() {
-    const { minValueId,
-            maxValueId,
-            arDepartmentNames,
-            minSalary,
-            maxSalary,
-            minBirthYear,
-            maxBirthYear } = employeeConfig;    
-    const id: number = getRandomNumber(minValueId, maxValueId);
-    const name: string = 'name' + id;
-    const birthDate: string = getRandomDate(minBirthYear, maxBirthYear).toISOString().slice(0, 10);
-    const department: string = getElement(arDepartmentNames);
-    const salary: number = getRandomNumber(minSalary, maxSalary);
-
-    const employee: Employee = {id, name, birthDate, department, salary};
-    return employee;   
+import { Employee } from "../model/Employee"
+import { getElement, getRandomDate, getRandomNumber } from "../utils/random";
+import employeeConfig from "../config/employee-config.json";
+export function createRandomEmployee(): Employee {
+    const {minId, maxId, departments,
+         minBirthYear, maxBirthYear, minSalary, maxSalary} = employeeConfig;
+    const id = getRandomNumber(minId, maxId,true, true);
+    const name = "name" + id.toString().slice(0,3);
+    const department = getElement(departments);
+    const birthDate = getRandomDate(minBirthYear, maxBirthYear).toISOString()
+    .slice(0, 10);
+    const salary = getRandomNumber(minSalary, maxSalary);
+    const employee: Employee = {id, name, department,
+         birthDate, salary}
+    return employee;
 }
-
-function getAge(fullDate: string) :number {
-    return today - new Date(fullDate).getFullYear();
-}
-
-type statType = {min: number, max: number, average: number};
-export function getAgeStatistics(employees: Employee[]): statType {
-    const ageInitial: number = getAge(employees[0].birthDate);
-    const ageStat = {min: ageInitial, max: ageInitial, average: 0};
-    return employees.reduce((res, cur) => {
-        const curAge = getAge(cur.birthDate)
-        if(curAge < res.min) {
-            res.min = curAge;
-        } else if(curAge > res.max) {
-            res.max = curAge;
+export function statAge(employees: Employee[]):
+ {minAge:number, maxAge:number, avgAge: number} {
+    const currentYear = new Date().getFullYear();
+    const result = employees.reduce((res, empl) => {
+        const age = currentYear - new Date(empl.birthDate).getFullYear();
+        if (res.minAge > age) {
+            res.minAge = age;
+        } else if(res.maxAge < age) {
+            res.maxAge = age
         }
-        res.average += Math.round(curAge / employees.length);
+        res.avgAge += age;
         return res;
-    }, ageStat);
-}
 
-export function getSalaryStatistics(employees: Employee[]): statType {
-    const salaryInitial = employees[0].salary;
-    const salaryStat = {min: salaryInitial, max: salaryInitial, average: 0};
-    return employees.reduce((res, cur) => {
-        const curSalary = cur.salary;
-        if(curSalary < res.min) {
-            res.min = curSalary; 
-        } else if(curSalary > res.max) {
-            res.max = curSalary;
+    }, {minAge: 1000, maxAge: 0, avgAge:0});
+    result.avgAge = Math.trunc(result.avgAge / employees.length) ;
+    return result;
+}
+export function statSalary(employees: Employee[]):
+ {minSalary:number, maxSalary:number, avgSalary: number} {
+   
+    const result = employees.reduce((res, empl) => {
+        const {salary} = empl;
+        if (res.minSalary > salary) {
+            res.minSalary = salary;
+        } else if(res.maxSalary < salary) {
+            res.maxSalary = salary;
         }
-        res.average += Math.round(curSalary / employees.length);
-        return res;        
-    }, salaryStat);
+        res.avgSalary += salary;
+        return res;
+
+    }, {minSalary: Number.MAX_VALUE, maxSalary: 0, avgSalary:0});
+    result.avgSalary = Math.trunc(result.avgSalary / employees.length) ;
+    return result;
 }
