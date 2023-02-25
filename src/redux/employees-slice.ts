@@ -1,10 +1,9 @@
 import {createSlice} from '@reduxjs/toolkit';
 import { Employee } from '../model/Employee';
 import { Company } from '../service/Company';
-// import { statAge } from '../service/EmployeesService';
 const company = new Company();
 const initialState: {employees: Employee[]} = {
-    employees: []
+    employees: company.getAllEmployees()
 }
 const employeesSlice = createSlice({
     initialState,
@@ -13,7 +12,7 @@ const employeesSlice = createSlice({
         addEmployee: (state, data) =>
         {
             company.addEmployee(data.payload);
-            state.employees = company.getAllEmployees(); 
+            state.employees = company.getAllEmployees();
         },
         removeEmployee: (state, data) => {
             company.removeEmployee(data.payload);

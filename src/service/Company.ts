@@ -1,18 +1,25 @@
 import { Employee } from "../model/Employee";
+import { getRandomNumber } from "../utils/random";
+import employeeConfig from '../../src/config/employee-config.json'
 
 export class Company {
-    private employees: Employee[] = [];  
+    private employees: Employee[] = [];
     addEmployee(empl: Employee): void {
-        this.employees.push(empl);
+        let id: number = 0;
+        do {
+            id = getRandomNumber(employeeConfig.minId, employeeConfig.maxId);
+        } while(this.employees.find(e => e.id == id));
+        this.employees.push({...empl, id: id});
+        console.log(this.employees);
     }
-    updateEmployee(id: number): void {
-        const empl = this.employees.find(e => e.id == id);
-        if (empl != null) {
-            const factor: number = empl.salary < 20000 ? 1.1 : 0.9;
-            const copyEmpl: Employee = {...empl, salary: empl.salary * factor};
-            const index = this.employees.findIndex(e => e.id == id);
-            this.employees[index] = copyEmpl;
+    updateEmployee(empl: Employee): void {
+        const index = this.employees.findIndex(e => e.id == empl.id);
+        
+        if (index >= 0 ) {
+           
+           this.employees[index] = empl;
         }
+        
     }
     getEmployee(id: number): Employee | null {
         const index: number = this.employees.findIndex(e => e.id === id);
@@ -20,8 +27,7 @@ export class Company {
     }
     removeEmployee(id: number): void {
         const index: number = this.employees.findIndex(e => e.id === id);
-        index >=0 && this.employees.splice(index, 1);
-
+        index >= 0 && this.employees.splice(index, 1) ;
     }
     getAllEmployees(): Employee[] {
         return this.employees.slice();

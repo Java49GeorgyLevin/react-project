@@ -1,4 +1,4 @@
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { NavigatorProps } from "../../model/NavigatorProps"
 import '../navigators/navigators.css'
 import { Box, AppBar, Tabs, Tab } from "@mui/material"
@@ -13,14 +13,13 @@ export const Navigator: React.FC<NavigatorProps> = ({ routes }) => {
         setTabNumber(0)
       
     },[routes]);
-
-
+   
     function changeTabNumber(event: any, newNumber: number) {
         setTabNumber(newNumber);
     }
     return <Box sx={{ marginTop: "15vh" }}>
         <AppBar sx={{ backgroundColor: "lightgray" }}>
-            <Tabs value={tabNumber} onChange={changeTabNumber} >
+            <Tabs value={tabNumber >= routes.length ? 0 : tabNumber } onChange={changeTabNumber} >
                 {getNavItems(routes)}
             </Tabs>
         </AppBar>

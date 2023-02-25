@@ -7,16 +7,20 @@ const authSlice = createSlice({
     name: "auth",
     reducers: {
         login: (state, data) => {
-            if (!state.authenticated) {
+            if(!state.authenticated) {
                 state.authenticated = data.payload;
             }
+
         },
         logout: (state) => {
-            if (state.authenticated) {
+            if(state.authenticated) {
                 state.authenticated = '';
             }
+
         }
+
     }
+
 })
 export const authActions = authSlice.actions;
 export const authReducer = authSlice.reducer;
