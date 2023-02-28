@@ -1,26 +1,16 @@
 import { Employee } from "../model/Employee"
 import { getElement, getRandomDate, getRandomNumber } from "../utils/random";
 import employeeConfig from "../config/employee-config.json";
-import { useState } from "react";
 export function createRandomEmployee(): Employee {
     const {minId, maxId, departments,
          minBirthYear, maxBirthYear, minSalary, maxSalary} = employeeConfig;
-    const subname = getRandomNumber(minId, maxId,true, true);
-    function upname(): string {
-        let string: string = '';
-        for(let i: number = 0;i < 4;i++){
-            string += String.fromCharCode(getRandomNumber(65, 90, true, true ));
-        } 
-        return string;
-    }
-
-    const name = upname() + subname.toString().slice(0,3);
+    const id = getRandomNumber(minId, maxId,true, true);
+    const name = "name" + id.toString().slice(0,3);
     const department = getElement(departments);
     const birthDate = getRandomDate(minBirthYear, maxBirthYear).toISOString()
     .slice(0, 10);
     const salary = getRandomNumber(minSalary, maxSalary);
-    const id: number = 0;
-    const employee: Employee = {id, name, department,
+    const employee: Employee = {id:0, name, department,
          birthDate, salary}
     return employee;
 }

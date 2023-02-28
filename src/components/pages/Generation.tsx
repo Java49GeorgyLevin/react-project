@@ -1,48 +1,42 @@
-import { Button, InputLabel, TextField } from "@mui/material";
-import { Box } from "@mui/system";
-import React, { useState } from "react";
-import { Company } from "../../service/Company";
-import { createRandomEmployee } from "../../service/EmployeesService";
+import React from "react";
+import {Box, TextField, Button, Alert} from '@mui/material';
+import {useDispatch} from 'react-redux';
+import generationConfig from '../../config/generation-config.json';
 import { employeesActions } from "../../redux/employees-slice";
-import { useDispatch } from "react-redux";
-import { Employee } from "../../model/Employee";
-import { Alert, AlertTitle } from "@mui/material";
-const minAmount = 1;
-const maxAmount = 50;
-const timeout = 4000;
-
+import { createRandomEmployee } from "../../service/EmployeesService";
 export const Generation: React.FC = () => {
-    const [flAlert, setFlAlert] = useState<boolean>(false);
     const dispatch = useDispatch();
-    const [amount, setAmount] = useState(0);
-
-    function handlerAmount(event: any) {
+    const {defaultAmount, minAmount, maxAmount, alertTimeout} = generationConfig;
+    const [amount, setAmount] = React.useState<number>(defaultAmount);
+    const [flAlertSuccess, setAlertAccess] = React.useState<boolean>(false);
+    function handlerAmount(event: any): void {
         setAmount(+event.target.value);
     }
     function onSubmitFn(event: any) {
         event.preventDefault();
-        for(let i = 0;i < amount;i++) {
-            const newEmployee: Employee = createRandomEmployee();
-            dispatch(employeesActions.addEmployee(newEmployee));
-            setFlAlert(true);
-            setTimeout(() => setFlAlert(false), timeout);
+        for(let i = 0; i < amount; i++) {
+            dispatch(employeesActions.addEmployee(createRandomEmployee()));
         }
-        document.querySelector('form')!.reset();
+        setAlertAccess(true);
+        setTimeout(() => setAlertAccess(false),alertTimeout );
     }
+    
+
 
     return <Box>
-        <form onSubmit={onSubmitFn}>
-            <TextField type='text' required fullWidth label="Amount new employees" helperText='Input amount new employees'
-            onChange={handlerAmount} inputProps={{
-                min: minAmount,
-                max: maxAmount
-            }}>
-            </TextField>
-            <Button type='submit'>Submit</Button>
-        </form>        
-        {flAlert && <Alert severity="success">
-            <AlertTitle>Successfully</AlertTitle>
-            added {amount} employee.
-        </Alert>}
+        <form onSubmit={onSubmitFn} >
+            <TextField label="amount of employee generated" fullWidth required 
+            type="number" onChange={handlerAmount}
+             value={amount}
+              helperText={`enter amount of employee objects in range [${minAmount}-${maxAmount}]`}
+              inputProps = {{
+                min: `${minAmount}`,
+                max: `${maxAmount}`
+              }} />
+              <Button type="submit">Generate</Button>
+
+        </form>
+        {flAlertSuccess && <Alert severity="success">Generated {amount} random employee objects</Alert>}
+         
     </Box>
 }

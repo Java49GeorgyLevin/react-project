@@ -1,16 +1,11 @@
 import { Employee } from "../model/Employee";
+import employeeConfig from "../config/employee-config.json";
 import { getRandomNumber } from "../utils/random";
-import employeeConfig from '../../src/config/employee-config.json'
-
 export class Company {
     private employees: Employee[] = [];
     addEmployee(empl: Employee): void {
-        let id: number = 0;
-        do {
-            id = getRandomNumber(employeeConfig.minId, employeeConfig.maxId);
-        } while(this.employees.find(e => e.id == id));
-        this.employees.push({...empl, id: id});
-        console.log(this.employees);
+        empl.id = getRandomNumber(employeeConfig.minId, employeeConfig.maxId);
+        this.employees.push(empl);
     }
     updateEmployee(empl: Employee): void {
         const index = this.employees.findIndex(e => e.id == empl.id);
