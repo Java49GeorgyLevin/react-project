@@ -8,8 +8,6 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { DialogType } from '../model/DialogType';
 
 export const AlertDialog: React.FC<DialogType> = ({open, title, content, confirmationFn}) => {
-console.log('Dialog');
-  console.log('15',open);
   const handleClose = (isOK: boolean) => {
     confirmationFn(isOK);
   };

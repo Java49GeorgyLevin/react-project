@@ -41,7 +41,6 @@ export const Employees: React.FC = () => {
                     <GridActionsCellItem label="remove" icon={<Delete />}
                         onClick={() => {
                             paramsId.current = +params.id;
-    // console.log(paramsId.current);
                             removeEmployee();
                         }}/>,
                     <GridActionsCellItem label="update" icon={<Edit />}
@@ -63,7 +62,6 @@ export const Employees: React.FC = () => {
         setOpen(true);
         title.current = 'Delete the employee?';
         content.current = getEmployee()!.name.toString();
-        // content.current = getEmployee()!.name;
         confirmationFn.current = actualDelete;
     }
 
@@ -129,6 +127,3 @@ export const Employees: React.FC = () => {
         confirmationFn={confirmationFn.current}/>
     </Box>
 }
-// function getListItems(employees: Employee[]): React.ReactNode {
-//     return employees.map((empl, index) => <ListItem key={index}><Typography>{JSON.stringify(empl)}</Typography></ListItem>)
-// }
