@@ -1,4 +1,6 @@
 export type DialogType = {
-    msg: string;
-    foo: (event: any) => void;
+    open: boolean;
+    title: string;
+    content: string;
+    confirmationFn: (isOK: boolean) => void;
 }

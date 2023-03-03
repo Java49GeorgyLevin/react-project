@@ -1,5 +1,4 @@
-import React, { ReactNode } from 'react';
-import { useState } from 'react';
+import React from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -8,13 +7,11 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { DialogType } from '../model/DialogType';
 
-export const AlertDialog: React.FC<DialogType> = ({msg, foo}) => {
+export const AlertDialog: React.FC<DialogType> = ({open, title, content, confirmationFn}) => {
 console.log('Dialog');
-  const [open, setOpen] = useState(true);
-
-  const handleClose = () => {
-    setOpen(false);
-   
+  console.log('15',open);
+  const handleClose = (isOK: boolean) => {
+    confirmationFn(isOK);
   };
 
     return    <Dialog
@@ -24,18 +21,16 @@ console.log('Dialog');
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {'Do you really want'}
+          {title}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            {msg}
+            {content}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Disagree</Button>
-          <Button onClick={foo} autoFocus>
-            Agree
-          </Button>
+          <Button onClick={() => handleClose(false)}>Cancel</Button>
+          <Button onClick={() => handleClose(true)} autoFocus>OK</Button>
         </DialogActions>
       </Dialog>
 }

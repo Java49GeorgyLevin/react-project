@@ -2,18 +2,16 @@ import React, {useState} from "react";
 import {FormControl, TextField, InputLabel, Select, Box, MenuItem, Button} from '@mui/material';
 import employeeConfig from '../../config/employee-config.json';
 import { Employee } from "../../model/Employee";
-import { AlertDialog } from "../AlertDialog";
-import { DialogType } from "../../model/DialogType";
-// type dt = {...DialogType};
+import { Grid } from '@mui/material';
+const sizeXs: number = 8;
+const sizeSm: number = 5;
 type Props = {
     submitFn: (empl: Employee)=>boolean,
     employeeUpdate?: Employee,
-    msg: string,
-    // msg: dt.msg
 }
 const initialEmployee: Employee = {id: 0, birthDate: '', name: '', 
 department: '', salary: 0};
-export const EmployeeForm: React.FC<Props> = ({submitFn, employeeUpdate, msg}) => {
+export const EmployeeForm: React.FC<Props> = ({submitFn, employeeUpdate}) => {
     const {minBirthYear, minSalary, maxBirthYear, maxSalary, departments} 
     = employeeConfig;
     const [employee, setEmployee] =
@@ -51,12 +49,10 @@ export const EmployeeForm: React.FC<Props> = ({submitFn, employeeUpdate, msg}) =
         setEmployee(employeeUpdate ? employeeUpdate : initialEmployee);
      }
 
-     const [flAlert, setFlAlert] = useState<boolean>(false);
-
-    
     return <Box>
-        {flAlert && <AlertDialog msg={msg} foo={onSubmitFn} />}
-        {!flAlert && <form onSubmit={() => setFlAlert(true)} onReset={onResetFn}>
+        <form onSubmit={onSubmitFn} onReset={onResetFn}>
+            <Grid container spacing={2} justifyContent='center'>
+                <Grid item xs={sizeXs} sm={sizeSm}>
             <FormControl fullWidth required>
                 <InputLabel id="select-department-id">Department</InputLabel>
                 <Select labelId="select-department-id" label="Department"
@@ -65,12 +61,16 @@ export const EmployeeForm: React.FC<Props> = ({submitFn, employeeUpdate, msg}) =
                     {departments.map(dep => <MenuItem value={dep}>{dep}</MenuItem>)}
                 </Select>
             </FormControl>
+                </Grid>
+                <Grid item xs={sizeXs} sm={sizeSm}>
             <TextField type="text" required fullWidth label="Employee name" 
             helperText="enter Employee name" onChange={handlerName} 
             value={employee.name} inputProps = {{
                 readOnly: !!employeeUpdate
 
             }}/>
+                </Grid>
+                <Grid item xs={sizeXs} sm={sizeSm}>
             <TextField type="date" required fullWidth label="birthDate" 
             value={employee.birthDate} inputProps  = {{
                 readOnly: !!employeeUpdate,
@@ -79,6 +79,8 @@ export const EmployeeForm: React.FC<Props> = ({submitFn, employeeUpdate, msg}) =
             }} InputLabelProps = {{
                 shrink: true
             }} onChange={handlerBirthdate}/>
+                </Grid>
+                <Grid item xs={sizeXs} sm={sizeSm}>
             <TextField label="salary" fullWidth required 
             type="number" onChange={handlerSalary}
              value={employee.salary || ''}
@@ -89,8 +91,10 @@ export const EmployeeForm: React.FC<Props> = ({submitFn, employeeUpdate, msg}) =
               }} InputLabelProps = {{
                 shrink: !!employeeUpdate || !!employee.salary
             }}/>
+                </Grid>
+            </Grid>
               <Button type="submit">Submit</Button>
             <Button type="reset">Reset</Button>
-        </form> }
+        </form>
     </Box>
 }
