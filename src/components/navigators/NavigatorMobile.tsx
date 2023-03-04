@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import MenuIcon from '@mui/icons-material/Menu';
-import {Box, Typography, AppBar, Drawer, IconButton, Toolbar, Tab, Tabs } from "@mui/material";
+import {Box, Typography, AppBar, Drawer, IconButton, Toolbar, Tab, Tabs, Divider } from "@mui/material";
 import { NavigatorProps } from "../../model/NavigatorProps";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { AccountCircle } from "@mui/icons-material"
 
 export const NavigatorMobile: React.FC<NavigatorProps> = ({ routes }) => {
     const [mobileOpen, setMobileOpen] = useState(false);
@@ -24,6 +25,16 @@ export const NavigatorMobile: React.FC<NavigatorProps> = ({ routes }) => {
         return routes.map((r, index) => <Tab component={Link} to={r.path}
             label={r.label} key={index} onClick={() => setMobileOpen(false)} />)
     }
+
+    function getOutLogOut(routes: { path: string; label: string }[]): { path: string; label: string }[] {
+        return routes.filter(r => r.path != '/logout');
+    }
+
+    function getLogOut(routes: { path: string; label: string }[]): { path: string; label: string }[] {
+        return routes.filter(r => r.path == '/logout');
+    }
+
+ 
 
     function getTitle(): string {
         let title = '';
@@ -54,7 +65,9 @@ export const NavigatorMobile: React.FC<NavigatorProps> = ({ routes }) => {
         </AppBar>
         <Box>
             <Drawer open={mobileOpen} onClose={(handleDrawerToggle)} >
-                {getNavItems(routes)}
+                {getNavItems(getOutLogOut(routes))}
+                <Divider/>
+                {getNavItems(getLogOut(routes))}
             </Drawer>
         </Box>
         <Box component="main" sx={{ flexGrow: 1, p: 3, width: `calc(100% - ${drawerWidth.current}px)` } }>
