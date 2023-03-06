@@ -44,7 +44,7 @@ export const Statistics: React.FC<Props> = ({ title, field, objects }) => {
     }
 
 
-    return <Box sx={{ width: "50vw", height: "30Vh" }}>
+    return <Box sx={{ width: {xs:"95vw", sm:"70vw", md:"60vw"}, height: {xs:"30vh", sm:"45vh" }}}>
         <Typography sx={{fontSize: "1.8em",
          fontWeight: "bold", textAlign: "center"}}>{title}</Typography>
         <DataGrid columns={columns} rows={[statistics]} />

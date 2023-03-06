@@ -1,78 +1,48 @@
-import React, { useEffect, useRef, useState } from "react";
-import MenuIcon from '@mui/icons-material/Menu';
-import {Box, Typography, AppBar, Drawer, IconButton, Toolbar, Tab, Tabs, Divider } from "@mui/material";
-import { NavigatorProps } from "../../model/NavigatorProps";
-import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { AccountCircle } from "@mui/icons-material"
-
+import React, { useEffect, useState } from 'react';
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Menu } from '@mui/icons-material'
+import { AppBar, IconButton, ListItem, Toolbar, Typography, Drawer, List, Box, Divider } from '@mui/material';
+import { NavigatorProps } from '../../model/NavigatorProps';
 export const NavigatorMobile: React.FC<NavigatorProps> = ({ routes }) => {
-    const [mobileOpen, setMobileOpen] = useState(false);
-    const drawerWidth = useRef<number>(240);
+
+    const [flOpen, setOpen] = useState<boolean>(false);
+
     const location = useLocation();
-
-    const handleDrawerToggle = () => {
-        setMobileOpen(!mobileOpen);
-    };
-
     const navigate = useNavigate();
     useEffect(() => {
-        if (routes.length != 0) {
-            navigate(routes[0].path)
+        if (routes.length > 0) {
+            navigate(routes[0].path);
         }
+
     }, [routes]);
-
-    function getNavItems(routes: { path: string; label: string }[]): React.ReactNode {
-        return routes.map((r, index) => <Tab component={Link} to={r.path}
-            label={r.label} key={index} onClick={() => setMobileOpen(false)} />)
-    }
-
-    function getOutLogOut(routes: { path: string; label: string }[]): { path: string; label: string }[] {
-        return routes.filter(r => r.path != '/logout');
-    }
-
-    function getLogOut(routes: { path: string; label: string }[]): { path: string; label: string }[] {
-        return routes.filter(r => r.path == '/logout');
-    }
-
- 
-
     function getTitle(): string {
-        let title = '';
-        const curRoute = routes.find(route => route.path === location.pathname)
-        if (curRoute && curRoute.label) {
-            title = curRoute.label;
-        }
-        return title;
+        const route = routes.find(r => r.path === location.pathname)
+        return route ? route.label : '';
     }
 
-    return <Box sx={{ display: 'flex' }}>
-        <AppBar>
-            <Tabs  >
-                <Toolbar>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        edge="start"
-                        onClick={handleDrawerToggle}
-                    >
-                        <MenuIcon />
-                    </IconButton>
-                    <Typography variant="h6" noWrap component="div">
-                        {getTitle()}
-                    </Typography>
-                </Toolbar>
-            </Tabs>
+
+    function toggleOpen() {
+        setOpen(!flOpen);
+    }
+    function getListItems(): React.ReactNode {
+        return routes.map(i => 
+                <ListItem onClick={toggleOpen} component={Link} to={i.path} key={i.path}>{i.label}</ListItem>)    
+    }
+    return <Box sx={{ marginTop: { xs: "15vh", sm: "20vh" } }}>
+        <AppBar position="fixed">
+            <Toolbar><IconButton onClick={toggleOpen} sx={{ color: 'white' }}>
+                <Menu />
+            </IconButton>
+                <Typography sx={{ width: "100%", textAlign: "center", fontSize: "1.5em" }}>
+                    {getTitle()}
+                </Typography>
+                <Drawer open={flOpen} onClose={toggleOpen} anchor="left">
+                    <List>
+                        {getListItems()}
+                    </List>
+                </Drawer></Toolbar>
+
         </AppBar>
-        <Box>
-            <Drawer open={mobileOpen} onClose={(handleDrawerToggle)} >
-                {getNavItems(getOutLogOut(routes))}
-                <Divider/>
-                {getNavItems(getLogOut(routes))}
-            </Drawer>
-        </Box>
-        <Box component="main" sx={{ flexGrow: 1, p: 3, width: `calc(100% - ${drawerWidth.current}px)` } }>
-            <Toolbar />
-            <Outlet></Outlet>
-        </Box>
+        <Outlet></Outlet>
     </Box>
 }
