@@ -12,6 +12,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { LoginData } from '../../model/LoginData';
 import { Alert } from '@mui/material';
+import { CodeType } from '../../model/CodeType';
 
 function Copyright(props: any) {
   return (
@@ -26,19 +27,20 @@ function Copyright(props: any) {
   );
 }
 type Props = {
-  submitFn: (loginData: LoginData)=>string
+  submitFn: (loginData: LoginData)=>void;
+  code: CodeType;
 };
 const theme = createTheme();
 
-export const LoginForm: React.FC<Props> = ({submitFn}) => {
+export const LoginForm: React.FC<Props> = ({submitFn, code}) => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const loginData: LoginData = {username: data.get("username") as string,
   password: data.get("password") as string}
-  setMessage(submitFn(loginData));
+ submitFn(loginData);
   };
-  const [message, setMessage] = React.useState('');
+  
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -90,7 +92,7 @@ export const LoginForm: React.FC<Props> = ({submitFn}) => {
             <Grid container>
              
               <Grid item>
-              {message && <Alert severity='error' onClose={() => setMessage('')}>{message}</Alert>}
+              {code == 'Credentials Error' && <Alert severity='error' >{code}, enter another credentials</Alert>}
               </Grid>
             </Grid>
           </Box>

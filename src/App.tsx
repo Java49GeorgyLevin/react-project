@@ -33,8 +33,11 @@ function App() {
         setRoutes(getRoutes());
     }, [authUser]);
     useEffect(() => {
-        dispatch(employeesActions.getEmployees());
-    },[])
+        if(authUser) {
+              dispatch(employeesActions.getEmployees());
+        }
+      
+    },[authUser])
   return <BrowserRouter>
       <Routes>
           <Route path='/' element={<NavigatorDispatch 
