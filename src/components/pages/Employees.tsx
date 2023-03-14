@@ -1,5 +1,5 @@
-import React, { ReactNode, useRef, useState } from 'react';
-import { Box, IconButton, List, ListItem, Typography } from '@mui/material';
+import React, { ReactNode, useEffect, useRef, useState } from 'react';
+import { Alert, Box, Collapse, IconButton, List, ListItem, Typography } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { Employee } from '../../model/Employee';
 import { DataGrid, GridActionsCellItem, GridColumns } from '@mui/x-data-grid';
@@ -8,10 +8,16 @@ import './table.css'
 import { employeesActions } from '../../redux/employees-slice';
 import { EmployeeForm } from '../forms/EmployeeForm';
 import { Confirmation } from '../common/Confirmation';
+import { CodeType } from '../../model/CodeType';
+import { codeActions } from '../../redux/codeSlice';
 export const Employees: React.FC = () => {
     const dispatch = useDispatch();
     const authUser = useSelector<any, string>(state => state.auth.authenticated);
     const editId = useRef<number>(0);
+
+
+    const code: CodeType = useSelector<any, CodeType>(state => state.errorCode.code);
+
     const columns = React.useRef<GridColumns>([
         {
             field: 'name', headerClassName: 'header', headerName: 'Employee Name',
@@ -68,12 +74,14 @@ export const Employees: React.FC = () => {
             dispatch(employeesActions.removeEmployee(idRemoved.current))
         }
         setOpen(false);
+        setCollOpen(true);
     }
     function actualUpdate(isOk: boolean) {
         if(isOk) {
             dispatch(employeesActions.updateEmployee(employeeToUpdate.current));
         }
         setOpen(false);
+        setCollOpen(true);
     }
     function getComponent(): ReactNode {
         let res: ReactNode = <Box sx={{ height: "70vh", width: "80vw" }}>
@@ -100,7 +108,11 @@ export const Employees: React.FC = () => {
         }
         return res;
     }
+
+    const [collOpen, setCollOpen] = useState(true);
     return <Box sx={{ height: "80vh", width: "80vw" }}>
+        {code != 'OK' && <Collapse in={collOpen}><Alert severity='error' onClose={() => 
+            setCollOpen(false)}>{code}</Alert></Collapse>}
         {getComponent()}
         <Confirmation confirmFn={confirmFn.current} open={open}
          title={title.current} content={content.current}></Confirmation>

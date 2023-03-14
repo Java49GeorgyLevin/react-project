@@ -13,9 +13,7 @@ const authSlice = createSlice({
         setAuthenticated(state, data) {
             state.authenticated = data.payload;
         }
-
     }
-
 })
 const actions = authSlice.actions;
 export const authActions = {

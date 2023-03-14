@@ -13,6 +13,9 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { LoginData } from '../../model/LoginData';
 import { Alert } from '@mui/material';
 import { CodeType } from '../../model/CodeType';
+import { GoogleAuthProvider } from 'firebase/auth';
+import { AuthService } from '../../service/AuthService';
+import { AuthServiceFirebase } from '../../service/AuthServiceFirebase';
 
 function Copyright(props: any) {
   return (
@@ -40,6 +43,11 @@ export const LoginForm: React.FC<Props> = ({submitFn, code}) => {
   password: data.get("password") as string}
  submitFn(loginData);
   };
+
+  const googleSubmit = () => {
+    submitFn({username: 'GOOGLE', password: 'MOOGLE'});  
+  }
+
   
   return (
     <ThemeProvider theme={theme}>
@@ -89,6 +97,13 @@ export const LoginForm: React.FC<Props> = ({submitFn, code}) => {
             >
               Sign In
             </Button>
+
+<Box textAlign={'center'}>
+    <Typography>--or--</Typography>
+         <Button onClick={googleSubmit}>GOOGLE</Button>
+</Box>
+
+            
             <Grid container>
              
               <Grid item>
@@ -103,3 +118,4 @@ export const LoginForm: React.FC<Props> = ({submitFn, code}) => {
     </ThemeProvider>
   );
 }
+
