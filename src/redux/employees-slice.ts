@@ -71,9 +71,9 @@ export const employeesActions: any = {
 
 async function getAllAndDispatch(dispatch: any) {
     try {
-    const employees = await company.getAllEmployees();
-    dispatch(actions.setEmployees(employees));
-    dispatch(codeAct('OK'));
+        const employees = await company.getAllEmployees();
+        dispatch(actions.setEmployees(employees));
+        dispatch(codeAct('OK'));
     } catch(e) {
         dispatch(codeAct('Unknown Error'));
     }
